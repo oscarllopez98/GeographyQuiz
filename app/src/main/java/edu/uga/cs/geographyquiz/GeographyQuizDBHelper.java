@@ -46,28 +46,32 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
                     + GEOGRAPHYQUIZZES_COLUMN_QUESTION5 + " TEXT,"
                     + GEOGRAPHYQUIZZES_COLUMN_QUESTION6 + " TEXT,"
                     + GEOGRAPHYQUIZZES_COLUMN_SCORE + " INTEGER,"
-                    + GEOGRAPHYQUIZZES_COLUMN_DATE + " TEXT"
+                    + GEOGRAPHYQUIZZES_COLUMN_DATE + " TEXT,"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION1) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id),"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION2) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id),"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION3) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id),"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION4) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id),"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION5) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id),"
+                    + "FOREIGN KEY(GEOGRAPHYQUIZZES_COLUMN_QUESTION6) REFERENCES TABLE_GEOGRAPHYQUESTIONS(id)"
                     + ")";
 
     //Creating Geography Questions Table
     private static final String CREATE_GEOGRAPHYQUESTIONS =
-            "create table " + TABLE_GEOGRAPHYQUIZZES + "("
+            "create table " + TABLE_GEOGRAPHYQUESTIONS + "("
                     + GEOGRAPHYQUESTIONS_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + GEOGRAPHYQUESTIONS_COLUMN_CONTINENT + " TEXT,"
-                    + GEOGRAPHYQUESTIONS_COLUMN_COUNTRY + " TEXT,"
+                    + GEOGRAPHYQUESTIONS_COLUMN_COUNTRY + " TEXT"
                     + ")";
 
     //Private reference to the single instance
     private static GeographyQuizDBHelper helperInstance;
 
-    //Private Constructor
     /**
      * Private Constructor*/
     private GeographyQuizDBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    //Public instance access method (How other classes access the database)
     /**
      * Public instance access method
      * */
@@ -82,10 +86,11 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * */
+     * On Creation of this DB Helper, create needed tables*/
     @Override
     public void onCreate(SQLiteDatabase db) {
-
+        db.execSQL(CREATE_GEOGRAPHYQUIZZES);
+        db.execSQL(CREATE_GEOGRAPHYQUESTIONS);
     }
 
     /**
