@@ -6,14 +6,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * This class is the Database helper, where the DB is instantiated here and
- * is retrieved from.
+ * This class is the Database helper, where the DB Tables are created and
+ * upgraded.
  * */
 public class GeographyQuizDBHelper extends SQLiteOpenHelper {
 
     //Constant values for easier code reading
     private static final String DB_NAME = "geographyquiz.db";
-    private static final int DB_VERSION = 8;
+    //Current version of the DB (Increment to rebuild database)
+    // -- DO NOT DECREMENT --
+    private static final int DB_VERSION = 9;
 
     //Name of the Geography Quizzes Table
     public static final String TABLE_GEOGRAPHYQUIZZES = "geographyquizzes";
@@ -70,14 +72,15 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
     private static GeographyQuizDBHelper helperInstance;
 
     /**
-     * Private Constructor*/
+     * Private Constructor
+     * @param context The context to set the DB to*/
     private GeographyQuizDBHelper(Context context){
         super(context, DB_NAME, null, DB_VERSION);
-        Log.d("CUSTOM","DBHelper Constructor Called");
     }
 
     /**
      * Public instance access method
+     * @param context The context to instantiate the {GeographyQuizDBHelper} with
      * */
     public static synchronized GeographyQuizDBHelper getInstance(Context context){
         //If DB has not been instantiated
@@ -90,7 +93,8 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * On Creation of this DB Helper, create needed tables*/
+     * On Creation of this DB Helper, create needed tables
+     * @param db The database with which to execute SQL statements*/
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d("CUSTOM", "DBHelper onCreate called");
@@ -99,7 +103,10 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * If the DB version has changed, update the oldVersion with the newVersion*/
+     * If the DB version has incremented, update the oldVersion with the newVersion
+     * @param db The database with which to execute SQL statements
+     * @param oldVersion The old version of the db
+     * @param newVersion The new version of the db*/
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //Drop tables and recreate them if the version has changed

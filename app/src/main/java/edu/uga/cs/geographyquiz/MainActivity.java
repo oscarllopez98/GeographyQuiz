@@ -2,8 +2,11 @@ package edu.uga.cs.geographyquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -61,9 +64,20 @@ public class MainActivity extends AppCompatActivity {
         Log.d("QUIZ_TEST", "QUESTION 6: " + quiz2.getQuestion_6() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_6()));
 
 
+        //Sami
+        StartQuiz();
 
+    }
 
-
+    //Sami
+    private void StartQuiz(){
+        Button startButton = (Button) findViewById(R.id.button);
+        startButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, QuizActivity.class));
+            }
+        });
     }
 
     private boolean populateOnNeed(){
