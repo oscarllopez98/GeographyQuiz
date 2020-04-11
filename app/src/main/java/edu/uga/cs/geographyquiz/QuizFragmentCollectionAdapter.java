@@ -17,7 +17,7 @@ public class QuizFragmentCollectionAdapter extends FragmentStatePagerAdapter {
         Quiz quiz = new Quiz();
         Bundle bundle = new Bundle();
         position = position+1;
-        bundle.putString("message", "hello from page "+position);
+        bundle.putInt("position", position);
         quiz.setArguments(bundle);
         return quiz;
     }

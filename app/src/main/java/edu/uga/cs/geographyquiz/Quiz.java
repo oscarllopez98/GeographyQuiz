@@ -61,9 +61,17 @@ public class Quiz extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_quiz, container, false);
-        textView = view.findViewById(R.id.text1);
-        String message = getArguments().getString("message");
-        textView.setText(message );
+
+        //Get and Set unique attributes for this page
+
+        textView = view.findViewById(R.id.questionPosition);
+        //Page position of the quiz
+        int position = getArguments().getInt("position");
+        textView.setText("Question: " + position);
         return view;
+    }
+
+    public void onRadioButtonClicked(){
+
     }
 }
