@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class that allows the user to indirectly interact with Geography Quizzes in the database*/
 public class GeographyQuizData {
 
     //Private members
@@ -26,6 +28,8 @@ public class GeographyQuizData {
     GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION1, GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION2,
             GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION3, GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION4,
             GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION5, GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION6,
+            GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_COMPLETED, GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_SCORE,
+            GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_DATE
     };
 
     //Constructor
@@ -51,6 +55,7 @@ public class GeographyQuizData {
 
         ContentValues values = new ContentValues();
 
+        //Put values into corresponding columns
         values.put(GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION1, geographyQuiz.getQuestion_1());
         values.put(GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION2, geographyQuiz.getQuestion_2());
         values.put(GeographyQuizDBHelper.GEOGRAPHYQUIZZES_COLUMN_QUESTION3, geographyQuiz.getQuestion_3());
@@ -75,6 +80,7 @@ public class GeographyQuizData {
         ArrayList<GeographyQuiz> geographyQuizzes = new ArrayList<>();
         Cursor cursor = null;
 
+        db = geographyQuizzesDbHelper.getReadableDatabase();
         cursor = db.query(GeographyQuizDBHelper.TABLE_GEOGRAPHYQUIZZES, allColumns, null, null, null, null, null);
         while (cursor.moveToNext()){
             //Query the values from one row, iterating over each row
@@ -100,9 +106,13 @@ public class GeographyQuizData {
             geographyQuizzes.add(geographyQuiz);
         }
 
+        cursor.close();
         return geographyQuizzes;
     }
 
+    /**
+     * Method for retrieving a Geography Quiz by using the quiz's ID value
+     * @param id The integer value representation of {geographyQuiz's} ID*/
     @TargetApi(Build.VERSION_CODES.M)
     public GeographyQuiz retrieveById(int id){
         try {
@@ -113,6 +123,7 @@ public class GeographyQuizData {
             Cursor cursor = null;
             cursor = db.rawQuery("SELECT id,q1,q2,q3,q4,q5,q6,completed,score,date FROM geographyquizzes WHERE id="+id,null);
 
+            //Quiz to return to the user
             GeographyQuiz geographyQuiz = new GeographyQuiz();
             while (cursor.moveToNext()){
 
@@ -145,53 +156,55 @@ public class GeographyQuizData {
     }
 
     /**
-     * Method that generates and returns a quiz with unique countries */
+     * Method that generates and returns a quiz with unique countries
+     * @return geographyQuiz The unique, randomly generated quiz to return to the user*/
     public GeographyQuiz generateQuiz(){
 
         GeographyQuestionData questionData = new GeographyQuestionData(context);
 
+        //Retrieve a list of ALL the questions from the database
         List<GeographyQuestion> questionList = questionData.retrieveGeographyQuestions();
         GeographyQuiz quiz = new GeographyQuiz();
-        //While quiz is not unique, keep trying to find random countries for questions
+        //While quiz is not unique, keep trying to find unique combination of random countries for questions
         boolean keepGoing = true;
         while (keepGoing){
             //Get a random id to check
-            int random = (int) (Math.random() * questionList.size());
+            int random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))){
                 quiz.setQuestion_1(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size());
+            random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))){
                 quiz.setQuestion_2(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size());
+            random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))) {
                 quiz.setQuestion_3(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size());
+            random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))) {
                 quiz.setQuestion_4(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size());
+            random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))) {
                 quiz.setQuestion_5(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size());
+            random = (int) (Math.random() * questionList.size() + 1);
             //If the question is not in the quiz yet, add it
             if ((!hasQuestion(quiz, (int) random))){
                 quiz.setQuestion_6(random);
@@ -207,6 +220,12 @@ public class GeographyQuizData {
         return quiz;
     }
 
+    /**
+     * Method for checking if a quiz possesses a specfic question by using that question's id
+     * @param quiz The Geography Quiz to check
+     * @param questionId The Geography Question to check if it is in {quiz}
+     * return True If the questsion's id appears in the quiz
+     * return False Otherwise*/
     private boolean hasQuestion(GeographyQuiz quiz, long questionId){
         if (questionId == quiz.getQuestion_1() || questionId == quiz.getQuestion_2() ||
                 questionId == quiz.getQuestion_3() || questionId == quiz.getQuestion_4() ||
@@ -216,6 +235,11 @@ public class GeographyQuizData {
         return false;
     }
 
+    /**
+     * Method that checks if {quiz} has no duplicate question ids (duplicate answers)
+     * @param quiz The Geography Quiz to validate for uniqueness
+     * @return True if there are no duplicate questions
+     * @return False otherwise*/
     private boolean isUnique(GeographyQuiz quiz){
         List<Integer> questionList = new LinkedList<>();
         questionList.add((int)quiz.getQuestion_1());
@@ -231,5 +255,43 @@ public class GeographyQuizData {
         questionList.add((int)quiz.getQuestion_6());
 
         return true;
+    }
+
+    /**
+     * Method that returns an integer array, including the original parameter value, that contains unique
+     * question ids, making it easier to product entire question pages and options
+     * @param id The integer value representing the id for the correct answer for the question*/
+    public int[] addRandomCountries(int id){
+        int[] randomCountries = new int[4];
+        boolean keepGoing = true;
+
+        GeographyQuestionData questionData = new GeographyQuestionData(this.context);
+        List<GeographyQuestion> questionList = questionData.retrieveGeographyQuestions();
+        int size = questionList.size();
+
+        //Keep looping until random, unique numbers are successfully generated
+        while (keepGoing){
+            //Generate random questions from all Geography Questions
+            int randomNum1 = (int)(Math.random() * size + 1);
+            int randomNum2 = (int)(Math.random() * size + 1);
+            int randomNum3 = (int)(Math.random() * size + 1);
+            int randomNum4 = (int)(Math.random() * size + 1);
+
+            //Check if numbers are unique, continue if not unique, otherwise set values into array
+            if (randomNum2 == randomNum1) continue;
+            else if (randomNum3 == randomNum2 || randomNum3 == randomNum1) continue;
+            else if (randomNum4 == randomNum3 || randomNum4 == randomNum2 || randomNum4 == randomNum1) continue;
+            else {
+                randomCountries[0] = id;
+                randomCountries[1] = randomNum1;
+                randomCountries[2] = randomNum2;
+                randomCountries[3] = randomNum4;
+                //Return integer array with original id value and other unique question id values
+                return randomCountries;
+            }
+        }
+
+        //Return null to appease the Java gods
+        return null;
     }
 }

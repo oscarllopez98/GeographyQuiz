@@ -10,6 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Class that allows the user to indirectly interact with Geography Questions in the database*/
 public class GeographyQuestionData {
 
     //Private members
@@ -18,24 +19,31 @@ public class GeographyQuestionData {
     private String[] allColumns = {GeographyQuizDBHelper.GEOGRAPHYQUESTIONS_COLUMN_ID,
     GeographyQuizDBHelper.GEOGRAPHYQUESTIONS_COLUMN_CONTINENT, GeographyQuizDBHelper.GEOGRAPHYQUESTIONS_COLUMN_COUNTRY};
 
-    //Constructor
+    /**
+     * Constructor
+     * @param context The context in which to set the instance */
     public GeographyQuestionData(Context context){
         this.geographyQuestionsDbHelper = GeographyQuizDBHelper.getInstance(context);
     }
 
-    //Open the database connection
+    /**
+     * Method for opening the database connection*/
     public void open(){
         db = geographyQuestionsDbHelper.getWritableDatabase();
     }
 
-    //Close the database connection
+    /**
+     * Method for closing the database connection*/
     public void close(){
         if (geographyQuestionsDbHelper != null){
             geographyQuestionsDbHelper.close();
         }
     }
 
-    //Method for storing a Geography Quiz into the database (This function works)
+    /**
+     * Method for storing a Geography Question in the database
+     * @param geographyQuestion The question to be stored into the database
+     * @return geographyQuestion The geography question with an updated id field*/
     public GeographyQuestion storeGeographyQuestion(GeographyQuestion geographyQuestion){
 
         ContentValues values = new ContentValues();
@@ -53,11 +61,15 @@ public class GeographyQuestionData {
         return geographyQuestion;
     }
 
-    //Method for retrieving all geography quizzes from the database (This function works)
+    /**
+     * Method for retrieving a list of all geography questions
+     * @return geographyQuestions The list of all geography questions in the database*/
     public List<GeographyQuestion> retrieveGeographyQuestions(){
 
+        //Start reading from database
         db = geographyQuestionsDbHelper.getReadableDatabase();
 
+        //ArrayList of geography questions
         ArrayList<GeographyQuestion> geographyQuestions = new ArrayList<>();
         Cursor cursor = null;
 
@@ -76,12 +88,14 @@ public class GeographyQuestionData {
             geographyQuestions.add(geographyQuestion);
         }
 
+        //Close cursor and return List of geography questions
         cursor.close();
         return geographyQuestions;
     }
 
     /**
-     * Method that returns a Quiz Question by its id key*/
+     * Method that returns a Quiz Question by its id key
+     * @param id The integer value to search a geography question for*/
     public GeographyQuestion retrieveById(int id){
         try {
             //Start reading from database
@@ -103,6 +117,7 @@ public class GeographyQuestionData {
                 return  geographyQuestion;
             }
 
+            //If nothing was found, return null
             return null;
         }catch (Exception e){
             Log.d("GEOG_QUES",e.toString());

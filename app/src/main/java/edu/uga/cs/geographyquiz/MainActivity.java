@@ -2,8 +2,11 @@ package edu.uga.cs.geographyquiz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Populates Questions Table if the table was just dropped
         populateOnNeed();
+
+        Log.d("WHAT","WHAT");
+
+        /*
 
         //Only close when you are SURE you are done working with the db
         GeographyQuestionData questionData = new GeographyQuestionData(getApplicationContext());
@@ -42,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         /*Done with Quiz Question Testing*/
         /*Start Quiz Testing*/
 
+        /*
+
         GeographyQuiz quiz = quizData.generateQuiz();
         Log.d("QUIZ_TEST","QUIZ 1 ID: " + quiz.getId());
         Log.d("QUIZ_TEST", "QUESTION 1: " + quiz.getQuestion_1() + "\t" + questionData.retrieveById((int)quiz.getQuestion_1()));
@@ -61,14 +70,45 @@ public class MainActivity extends AppCompatActivity {
         Log.d("QUIZ_TEST", "QUESTION 6: " + quiz2.getQuestion_6() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_6()));
 
 
-
-
-
+         */
+        //Begin quiz for user
+        Log.d("CUSTOM","Start Quiz");
+        StartQuiz();
     }
 
+    private void StartQuiz(){
+        Button startButton = (Button) findViewById(R.id.button);
+        startButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //Generate Quiz and Random answers
+                //Only close when you are SURE you are done working with the db
+                GeographyQuizData quizData = new GeographyQuizData(getApplicationContext());
+                //Open db connection
+                quizData.open();
+                //Generate Geography Quiz with unique answers
+                GeographyQuiz newGeoQuiz = quizData.generateQuiz();
+
+                //Update database with newGeoQuiz data
+                quizData.storeGeographyQuiz(newGeoQuiz);
+
+
+
+                //Start activity to Quiz
+                startActivity(new Intent(MainActivity.this, QuizActivity.class));
+            }
+        });
+    }
+
+    /**
+     * Method that populates the quiz question database, depending on if it needs to be repopulated.
+     * Repopulates when the db version is incremented.
+     * @return true If database is repopulated*/
     private boolean populateOnNeed(){
+        //Interact with database and open connection
         GeographyQuestionData questionData = new GeographyQuestionData(getApplicationContext());
         questionData.open();
+        //List of all current questions
         List<GeographyQuestion> questionList = questionData.retrieveGeographyQuestions();
         //If there are no questions stored in the database, populate and return true
         if (questionList.size() == 0){
@@ -89,10 +129,12 @@ public class MainActivity extends AppCompatActivity {
                     questionData.storeGeographyQuestion(question);
                 }//while
             }catch (Exception e) {
+                //Error reading CVS
                 Log.e("CVSReading", e.toString() );
             }
             return true;
         }
+        //Else, there were no questions stored in the database, so return false
         else{
             return false;
         }

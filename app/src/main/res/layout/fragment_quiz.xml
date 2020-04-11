@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout tools:context=".Quiz"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- TODO: Update blank fragment layout -->
+
+        <!-- Question Title -->
+        <TextView
+            android:id="@+id/questionPosition"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:text="@string/hello_blank_fragment"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/questionAsked"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <!-- Question Asked -->
+        <TextView
+            android:id="@+id/questionAsked"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/questionPosition"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/answerChoices"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <!-- Answer choices -->
+        <RadioGroup
+            android:id="@+id/answerChoices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/questionAsked"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent">
+
+            <RadioButton
+                android:id="@+id/answer_choice_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empty"/>
+
+            <RadioButton
+                android:id="@+id/answer_choice_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empty"/>
+
+            <RadioButton
+                android:id="@+id/answer_choice_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empty"/>
+
+            <RadioButton
+                android:id="@+id/answer_choice_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Empty"/>
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
