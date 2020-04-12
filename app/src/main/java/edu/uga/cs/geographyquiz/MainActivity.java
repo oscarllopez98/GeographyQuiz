@@ -24,56 +24,21 @@ public class MainActivity extends AppCompatActivity {
         //Populates Questions Table if the table was just dropped
         populateOnNeed();
 
-        Log.d("WHAT","WHAT");
-
-        /*
-
-        //Only close when you are SURE you are done working with the db
-        GeographyQuestionData questionData = new GeographyQuestionData(getApplicationContext());
-        questionData.open();
-        GeographyQuizData quizData = new GeographyQuizData(getApplicationContext());
-        quizData.open();
-
-        //Get all the questions that were added to the database
-        List<GeographyQuestion> questionList = questionData.retrieveGeographyQuestions();
-        Log.d("CUSTOM_TEST_LENGTH","" + questionList.size());
-
-        //Random number between 0 and last index of questionList
-        for (int i = 0; i < 5; i++) {
-            double randomNum = Math.random() * (questionList.size() - 1);
-            GeographyQuestion question = questionList.get((int) (randomNum));
-
-            Log.d("CUSTOM_TEST", "Continent: " + question.getContinent() + "\tCountry: " + question.getCountry());
-        }
-
-        /*Done with Quiz Question Testing*/
-        /*Start Quiz Testing*/
-
-        /*
-
-        GeographyQuiz quiz = quizData.generateQuiz();
-        Log.d("QUIZ_TEST","QUIZ 1 ID: " + quiz.getId());
-        Log.d("QUIZ_TEST", "QUESTION 1: " + quiz.getQuestion_1() + "\t" + questionData.retrieveById((int)quiz.getQuestion_1()));
-        Log.d("QUIZ_TEST", "QUESTION 2: " + quiz.getQuestion_2() + "\t" + questionData.retrieveById((int)quiz.getQuestion_2()));
-        Log.d("QUIZ_TEST", "QUESTION 3: " + quiz.getQuestion_3() + "\t" + questionData.retrieveById((int)quiz.getQuestion_3()));
-        Log.d("QUIZ_TEST", "QUESTION 4: " + quiz.getQuestion_4() + "\t" + questionData.retrieveById((int)quiz.getQuestion_4()));
-        Log.d("QUIZ_TEST", "QUESTION 5: " + quiz.getQuestion_5() + "\t" + questionData.retrieveById((int)quiz.getQuestion_5()));
-        Log.d("QUIZ_TEST", "QUESTION 6: " + quiz.getQuestion_6() + "\t" + questionData.retrieveById((int)quiz.getQuestion_6()));
-
-        GeographyQuiz quiz2 = quizData.retrieveById((int)quiz.getId());
-        Log.d("QUIZ_TEST","QUIZ 2 ID: " + quiz2.getId());
-        Log.d("QUIZ_TEST", "QUESTION 1: " + quiz2.getQuestion_1() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_1()));
-        Log.d("QUIZ_TEST", "QUESTION 2: " + quiz2.getQuestion_2() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_2()));
-        Log.d("QUIZ_TEST", "QUESTION 3: " + quiz2.getQuestion_3() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_3()));
-        Log.d("QUIZ_TEST", "QUESTION 4: " + quiz2.getQuestion_4() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_4()));
-        Log.d("QUIZ_TEST", "QUESTION 5: " + quiz2.getQuestion_5() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_5()));
-        Log.d("QUIZ_TEST", "QUESTION 6: " + quiz2.getQuestion_6() + "\t" + questionData.retrieveById((int)quiz2.getQuestion_6()));
-
-
-         */
         //Begin quiz for user
         Log.d("CUSTOM","Start Quiz");
         StartQuiz();
+        ViewResults();
+    }
+
+    private void ViewResults(){
+        Button viewButton = findViewById(R.id.button2);
+        viewButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this,ResultsActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void StartQuiz(){
@@ -84,18 +49,78 @@ public class MainActivity extends AppCompatActivity {
                 //Generate Quiz and Random answers
                 //Only close when you are SURE you are done working with the db
                 GeographyQuizData quizData = new GeographyQuizData(getApplicationContext());
+                GeographyQuestionData questionData = new GeographyQuestionData(getApplicationContext());
                 //Open db connection
                 quizData.open();
+                questionData.open();
                 //Generate Geography Quiz with unique answers
                 GeographyQuiz newGeoQuiz = quizData.generateQuiz();
+                newGeoQuiz.setScore(0);
 
-                //Update database with newGeoQuiz data
-                quizData.storeGeographyQuiz(newGeoQuiz);
+                //Question List
+                List<GeographyQuestion> questionList = questionData.retrieveGeographyQuestions();
 
+                String[] wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_1()).getContinent());
+                //3 Other wrong answers
+                String wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                //Print out Quiz questions and quiz info
+                Log.d("TEST_QUIZ","ID: "+newGeoQuiz.getId());
+                Log.d("TEST_QUIZ","Q1: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_1()).getCountry() + wrongAnswersString);
 
+                wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_2()).getContinent());
+                //3 Other wrong answers
+                wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                Log.d("TEST_QUIZ","Q2: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_2()).getCountry() + wrongAnswersString);
+
+                wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_3()).getContinent());
+                //3 Other wrong answers
+                wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                Log.d("TEST_QUIZ","Q3: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_3()).getCountry() + wrongAnswersString);
+
+                wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_4()).getContinent());
+                //3 Other wrong answers
+                wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                Log.d("TEST_QUIZ","Q4: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_4()).getCountry() + wrongAnswersString);
+
+                wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_5()).getContinent());
+                //3 Other wrong answers
+                wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                Log.d("TEST_QUIZ","Q5: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_5()).getCountry() + wrongAnswersString);
+
+                wrongAnswersArray = quizData.addRandomContinents(questionData.retrieveById((int)newGeoQuiz.getQuestion_6()).getContinent());
+                //3 Other wrong answers
+                wrongAnswersString = "," +
+                        wrongAnswersArray[0] + "," +
+                        wrongAnswersArray[1] + "," +
+                        wrongAnswersArray[2] + "," +
+                        wrongAnswersArray[3];
+                Log.d("TEST_QUIZ","Q6: "+questionData.retrieveById((int)newGeoQuiz.getQuestion_6()).getCountry() + wrongAnswersString);
 
                 //Start activity to Quiz
-                startActivity(new Intent(MainActivity.this, QuizActivity.class));
+                Intent intent = new Intent(MainActivity.this, QuizActivity.class);
+                //Put ID of quiz into the extra, so it accessible from QuizActivity class
+                intent.putExtra("QUIZ_ID",newGeoQuiz.getId());
+                startActivity(intent);
             }
         });
     }

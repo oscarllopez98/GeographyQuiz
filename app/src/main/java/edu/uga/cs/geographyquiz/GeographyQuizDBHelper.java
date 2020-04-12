@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.RadioGroup;
 
 /**
  * This class is the Database helper, where the DB Tables are created and
@@ -15,7 +16,7 @@ public class GeographyQuizDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "geographyquiz.db";
     //Current version of the DB (Increment to rebuild database)
     // -- DO NOT DECREMENT --
-    private static final int DB_VERSION = 9;
+    private static final int DB_VERSION = 16;
 
     //Name of the Geography Quizzes Table
     public static final String TABLE_GEOGRAPHYQUIZZES = "geographyquizzes";
