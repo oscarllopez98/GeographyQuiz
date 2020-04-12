@@ -8,16 +8,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp">
 
         <!-- TODO: Update blank fragment layout -->
 
         <!-- Question Title -->
         <TextView
             android:id="@+id/questionPosition"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="@string/hello_blank_fragment"
+            android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/questionAsked"
@@ -28,6 +31,7 @@
             android:id="@+id/questionAsked"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@id/questionPosition"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/answerChoices"
@@ -38,36 +42,49 @@
             android:id="@+id/answerChoices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
             app:layout_constraintTop_toBottomOf="@id/questionAsked"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/submit"
             app:layout_constraintLeft_toLeftOf="parent">
 
             <RadioButton
                 android:id="@+id/answer_choice_1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Empty"/>
+                android:text="Empty" />
 
             <RadioButton
                 android:id="@+id/answer_choice_2"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Empty"/>
 
             <RadioButton
                 android:id="@+id/answer_choice_3"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Empty"/>
 
             <RadioButton
                 android:id="@+id/answer_choice_4"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Empty"/>
 
         </RadioGroup>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/questionAsked"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="Submit Quiz"
+            android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

@@ -169,44 +169,44 @@ public class GeographyQuizData {
         boolean keepGoing = true;
         while (keepGoing){
             //Get a random id to check
-            int random = (int) (Math.random() * questionList.size() + 1);
+            int random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))){
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()){
                 quiz.setQuestion_1(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size() + 1);
+            random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))){
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()){
                 quiz.setQuestion_2(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size() + 1);
+            random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))) {
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()) {
                 quiz.setQuestion_3(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size() + 1);
+            random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))) {
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()) {
                 quiz.setQuestion_4(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size() + 1);
+            random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))) {
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()) {
                 quiz.setQuestion_5(random);
             }
 
             //Get a random id to check
-            random = (int) (Math.random() * questionList.size() + 1);
+            random = (int) (Math.random() * questionList.size());
             //If the question is not in the quiz yet, add it
-            if ((!hasQuestion(quiz, (int) random))){
+            if ((!hasQuestion(quiz, random)) && random > -1 && random < questionList.size()){
                 quiz.setQuestion_6(random);
             }
 
@@ -217,6 +217,7 @@ public class GeographyQuizData {
         }
         //Store quiz
         this.storeGeographyQuiz(quiz);
+
         return quiz;
     }
 
@@ -227,6 +228,7 @@ public class GeographyQuizData {
      * return True If the questsion's id appears in the quiz
      * return False Otherwise*/
     private boolean hasQuestion(GeographyQuiz quiz, long questionId){
+
         if (questionId == quiz.getQuestion_1() || questionId == quiz.getQuestion_2() ||
                 questionId == quiz.getQuestion_3() || questionId == quiz.getQuestion_4() ||
                 questionId == quiz.getQuestion_5() || questionId == quiz.getQuestion_6()){
@@ -260,9 +262,9 @@ public class GeographyQuizData {
     /**
      * Method that returns an integer array, including the original parameter value, that contains unique
      * question ids, making it easier to product entire question pages and options
-     * @param id The integer value representing the id for the correct answer for the question*/
-    public int[] addRandomCountries(int id){
-        int[] randomCountries = new int[4];
+     * @param continent The string value representing the continent for the correct answer for the question*/
+    public String[] addRandomContinents(String continent){
+        String[] randomContinents = new String[4];
         boolean keepGoing = true;
 
         GeographyQuestionData questionData = new GeographyQuestionData(this.context);
@@ -272,26 +274,42 @@ public class GeographyQuizData {
         //Keep looping until random, unique numbers are successfully generated
         while (keepGoing){
             //Generate random questions from all Geography Questions
-            int randomNum1 = (int)(Math.random() * size + 1);
-            int randomNum2 = (int)(Math.random() * size + 1);
-            int randomNum3 = (int)(Math.random() * size + 1);
-            int randomNum4 = (int)(Math.random() * size + 1);
+            int randomNum1 = (int)(Math.random() * size);
+            int randomNum2 = (int)(Math.random() * size);
+            int randomNum3 = (int)(Math.random() * size);
 
-            //Check if numbers are unique, continue if not unique, otherwise set values into array
-            if (randomNum2 == randomNum1) continue;
-            else if (randomNum3 == randomNum2 || randomNum3 == randomNum1) continue;
-            else if (randomNum4 == randomNum3 || randomNum4 == randomNum2 || randomNum4 == randomNum1) continue;
+            //Check if continents are unique, continue if not unique, otherwise set values into array
+            if (questionData.retrieveGeographyQuestions().get(randomNum1).getContinent().equals(continent)) continue;
+            else if (questionData.retrieveGeographyQuestions().get(randomNum2).getContinent()
+                    .equals(questionData.retrieveGeographyQuestions().get(randomNum1).getContinent())
+                    ||
+                    (questionData.retrieveGeographyQuestions().get(randomNum2).getContinent().equals(continent))) continue;
+            else if ((questionData.retrieveGeographyQuestions().get(randomNum3).getContinent()
+                    .equals(questionData.retrieveGeographyQuestions().get(randomNum2).getContinent()))
+                    ||
+                    (questionData.retrieveGeographyQuestions().get(randomNum3).getContinent()
+                            .equals(questionData.retrieveGeographyQuestions().get(randomNum1).getContinent()))
+                    ||
+                    (questionData.retrieveGeographyQuestions().get(randomNum3).getContinent().equals(continent))) continue;
             else {
-                randomCountries[0] = id;
-                randomCountries[1] = randomNum1;
-                randomCountries[2] = randomNum2;
-                randomCountries[3] = randomNum4;
-                //Return integer array with original id value and other unique question id values
-                return randomCountries;
+                randomContinents[0] = continent;
+                randomContinents[1] = questionData.retrieveGeographyQuestions().get(randomNum1).getContinent();
+                randomContinents[2] = questionData.retrieveGeographyQuestions().get(randomNum2).getContinent();
+                randomContinents[3] = questionData.retrieveGeographyQuestions().get(randomNum3).getContinent();
+                //Return string array with original id value and other unique continent values
+                return randomContinents;
             }
         }
 
         //Return null to appease the Java gods
         return null;
+    }
+
+    /**
+     * Method that updates the user's score after they finish the quiz*/
+    public void updateScore(int score, int quizID){
+        ContentValues cv = new ContentValues();
+        cv.put("score",score);
+        db.update("geographyquizzes",cv,"id="+quizID,null);
     }
 }

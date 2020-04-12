@@ -8,8 +8,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class QuizFragmentCollectionAdapter extends FragmentStatePagerAdapter {
 
-    public QuizFragmentCollectionAdapter(FragmentManager fm) {
+    private long quizID = -1;
+
+    public QuizFragmentCollectionAdapter(FragmentManager fm, long quizID) {
         super(fm);
+        this.quizID = quizID;
     }
 
     @Override
@@ -17,7 +20,10 @@ public class QuizFragmentCollectionAdapter extends FragmentStatePagerAdapter {
         Quiz quiz = new Quiz();
         Bundle bundle = new Bundle();
         position = position+1;
-        bundle.putInt("position", position);
+        bundle.putInt("POSITION", position);
+
+        //Get current QuizID
+        bundle.putLong("QUIZ_ID",getQuizID());
         quiz.setArguments(bundle);
         return quiz;
     }
@@ -25,5 +31,9 @@ public class QuizFragmentCollectionAdapter extends FragmentStatePagerAdapter {
     @Override
     public int getCount() {
         return 6; //This is where you set your page numbers
+    }
+
+    public long getQuizID(){
+        return this.quizID;
     }
 }
